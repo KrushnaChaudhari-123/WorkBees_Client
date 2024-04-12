@@ -1,0 +1,25 @@
+#submit{
+    margin: 20px;
+    width: 100px;
+    height: 40px;
+    background-color: yellowgreen;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+#submit:hover{
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+#payment-form{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 20px;
+    
+}
