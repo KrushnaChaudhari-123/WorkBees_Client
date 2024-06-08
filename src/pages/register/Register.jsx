@@ -28,7 +28,7 @@ function Register() {
     email: "",
     password: "",
     img: "",
-    country: "",
+    country: "India",
     isSeller: false,
     desc: "",
     phone: '',
@@ -62,6 +62,53 @@ function Register() {
   const handleSubmit = async (e) => {
   
     e.preventDefault();
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+    const phoneNumberRegex = /^[6-9]\d{9}$/;
+
+    if(user.username.length <= 0){
+      document.getElementById("username").focus();
+      toast.error("Please enter an username");
+      return;
+    }
+   
+    if(user.email.length <= 0){
+      document.getElementById("email").focus();
+      toast.error("Please enter an email");
+      return;
+    }
+    if(user.password.length <= 0){
+      document.getElementById("password").focus();
+      toast.error("Please enter a password");
+      return;
+    }
+    if(user.phone.length < 10){
+      toast.error("Please enter a valid Mobile Number");
+      document.getElementById( "phone").focus();
+      return;
+    }
+    
+    if(user.desc.length <= 0){
+      document.getElementById("desc").focus();
+      toast.error("Please enter a Description");
+      return;
+    }
+    
+    if (!emailRegex.test(user.email) ) {
+      document.getElementById("email").focus();
+      toast.error("Email format is wrong");
+      return;
+    }
+    if (!passwordRegex.test(user.password) ) {
+      document.getElementById("password").focus();
+      toast.error("Password must be 8-15 characters long, include at least" +
+       " one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&)");
+      return;
+    }
+    if(!phoneNumberRegex.test(user.phone)){
+      document.getElementById("phone").focus();
+      toast.error("Phone number format is wrong");
+    }
     const url = await upload(file);
 
     try {
@@ -89,6 +136,7 @@ function Register() {
           <label htmlFor="">Username</label>
           <input
             name="username"
+            id="username"
             type="text"
             placeholder="Name"
             onChange={handleChange}
@@ -98,8 +146,9 @@ function Register() {
 
           <label htmlFor="">Email</label>
           <input
+            id="email"
             name="email"
-            type="email"
+            type="text"
             placeholder="Email"
             onChange={handleChange}
           />
@@ -107,6 +156,7 @@ function Register() {
 
           <label htmlFor="">Password</label>
           <input
+            id="password"
             name="password"
             type={showPassword ? 'text' : 'password'}
             placeholder="password"
@@ -128,8 +178,10 @@ function Register() {
 
           <label htmlFor="">Country</label>
           <input
+            id="country"
             name="country"
             type="text"
+            defaultValue={"India"}
             placeholder="INDIA"
             onChange={handleChange}
           />
@@ -149,9 +201,9 @@ function Register() {
           </div>
           <label htmlFor="">Phone Number</label>
           <input
+            id="phone"
             name="phone"
             type="text"
-            pattern="[0-9]{10}"
             placeholder="+91 7350478708"
             onChange={handleChange}
           />
@@ -161,7 +213,7 @@ function Register() {
           <textarea
             placeholder="A short description of yourself"
             name="desc"
-            id=""
+            id="desc"
             cols="30"
             rows="10"
             onChange={handleChange}

@@ -14,6 +14,24 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+    if(username.length <= 0){
+      document.getElementById("username").focus();
+      toast.error("Please enter an username");
+      return;
+    }
+    if(password.length <= 0){
+      document.getElementById("password").focus();
+      toast.error("Please enter a password");
+      return;
+    }
+    if (!passwordRegex.test(password) ) {
+      document.getElementById("password").focus();
+      toast.error("Password must be 8-15 characters long, include at least" +
+       " one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&)");
+      return;
+    }
+
     try {
       const res = await newRequest.post("/auth/login", { username, password });
       localStorage.setItem("currentUser", JSON.stringify(res.data));
@@ -22,7 +40,7 @@ function Login() {
       }
       navigate("/")
     } catch (err) {
-      toast.error("Login Unsuccessfull");
+      toast.error(err.response.data);
       setError(err.response.data);
     }
   };
@@ -34,6 +52,7 @@ function Login() {
         <h1>Sign in</h1>
         <label htmlFor="">Username</label>
         <input
+          id="username"
           name="username"
           type="text"
           placeholder="Enter UserName"
@@ -42,6 +61,7 @@ function Login() {
 
         <label htmlFor="">Password</label>
         <input
+          id="password"
           name="password"
           type={showPassword ? 'text' : 'password'}
           placeholder="Enter Password"
@@ -50,7 +70,7 @@ function Login() {
              
      
         <button type="submit">Login</button>
-        {error && error}
+        
       </form>
     </div>
   );
